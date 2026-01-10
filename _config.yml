@@ -1,7 +1,20 @@
-title: 0xf4f4
-description: Blog pessoal
-author: 0xf4f4
+title: "Gonçalo Lima"
+description: "Portfolio & Blog"
+author:
+name: "Gonçalo Lima"
+email: "goncalolimaprof@gmail.com"
 url: https://0xf4f4.github.io
 theme: minima
 markdown: kramdown
 lang: pt-PT
+
+plugins:
+  - jekyll-feed
+  - jekyll-seo-tag
+
+exclude:
+  - Gemfile
+  - Gemfile.lock
+  - docker-compose.yml
+
+permalink: /blog/:year/:month/:day/:title/
