@@ -8,7 +8,7 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor i
 
 ## Projetos Recentes
 
-- [Lorem ipsum dolor sit amet](/portfolio/2026-01-10-post1) — Lorem ipsum dolor sit amet
+- [Lorem ipsum dolor sit amet](/blog/2026-01-10-post1) — Lorem ipsum dolor sit amet
 
 [Ver todos os projetos →](/portfolio/)
 
