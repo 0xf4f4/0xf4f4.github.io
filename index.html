@@ -11,10 +11,42 @@
         <nav class="navbar">
             <h4>Gonçalo Lima</h4>
             <ul class="nav-menu">
-                <li><a href="#about" class="nav-link">About Me</a></li>
+                <li><a href="#about" class="nav-link">Sobre mim</a></li>
                 <li><a href="projects.html" class="nav-link">Projects</a></li>
-                <li><button id="light-dark" class="">Light/Dark??</button></li>
+                <li>
+                <div class="theme-toggle-wrapper">
+                    <input type="checkbox" id="light-dark" class="theme-toggle-checkbox">
+                    <label for="light-dark" class="theme-toggle-label">
+                        <span class="toggle-inner"></span>
+                        <span class="toggle-switch"></span>
+                    </label>
+                </div>
+                </li>
             </ul>
         </nav>
+        <section id="about" class="about">
+            <h1>Sobre mim</h1>
+            <p>
+            Lorem ipsum dolor sit amet consectetur adipiscing elit. Consectetur adipiscing elit quisque faucibus ex sapien vitae. Ex sapien vitae pellentesque sem placerat in id. Placerat in id cursus mi pretium tellus duis. Pretium tellus duis convallis tempus leo eu aenean.
+            </p>
+        </section> 
+        <section class="projects">
+            <h1>Projetos</h1>
+            <div class="project-card">
+            <h3>Example project 1</h3>
+            <img src="assets/"> 
+            <p>Descriçao projeto</p>
+            </div>
+            <div class="project-card">
+            <h3>Example project 2</h3>
+            <img src="assets/"> 
+            <p>Descriçao projeto</p>
+            </div>
+            <a href="projects.html" class="">Ver mais projetos</a>
+        </section>
+        <footer class="footer">
+            <p>© 2026 Gonçalo Lima | <a href="https://github.com/0xf4f4">GitHub</a></p>
+        </footer>
+        <script src="assets/js/script.js"></script>
     </body>
 </html>
