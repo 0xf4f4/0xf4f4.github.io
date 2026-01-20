@@ -20,4 +20,5 @@ https://0xf4f4.github.io
 
 ---
 
-Feito com HTML + CSS.
+Feito com HTML + CSS + JS
+
