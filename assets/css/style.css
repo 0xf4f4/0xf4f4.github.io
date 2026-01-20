@@ -136,26 +136,27 @@ html.dark-mode .nav-link:hover {
     font-size: 1.1rem;
 }
 
-/* projetos*/
-
-.projects {
+.project {
     padding: 3rem 2rem;
     text-align: center;
 }
 
-.projects h1 {
+.project-container {
+    max-width: 1000px;
+    margin: 0 auto 2rem auto;
+}
+
+.project-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2rem;
+    justify-items: center;
+}
+
+.project h1 {
+    text-align: center;
     margin-bottom: 2rem;
     font-size: 2rem;
-}
-
-.projects {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 2rem;
-    max-width: 1000px;
-    margin: 0 auto;
-    padding: 3rem 2rem;
-    text-align: center;
 }
 
 .project-card {
@@ -164,6 +165,9 @@ html.dark-mode .nav-link:hover {
     border-radius: 8px;
     padding: 1.5rem;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
+    text-align: center;
+    max-width: 400px;
+    width: 100%;
 }
 
 .project-card:hover {
@@ -171,8 +175,20 @@ html.dark-mode .nav-link:hover {
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
 }
 
+.project-card h3 a {
+    text-decoration: none;
+    color: inherit;
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+.project-card h3 a:hover {
+    color: #0066cc;
+}
+
 .project-card h3 {
     margin-bottom: 1rem;
+    margin-top: -0.5rem;
     font-size: 1.3rem;
 }
 
@@ -188,10 +204,10 @@ html.dark-mode .nav-link:hover {
     line-height: 1.5;
 }
 
-/* link projetos */
-.projects a {
+
+.project > a {
     display: inline-block;
-    margin-top: 2rem;
+    text-align: center;
     padding: 0.8rem 1.5rem;
     background-color: #0066cc;
     color: white;
@@ -200,14 +216,38 @@ html.dark-mode .nav-link:hover {
     transition: background-color 0.3s ease;
 }
 
-.projects a:hover {
+.project > a:hover {
     background-color: #0052a3;
 }
 
-html.dark-mode .projects a {
+html.dark-mode .project > a {
     background-color: #0088ff;
 }
 
-html.dark-mode .projects a:hover {
+html.dark-mode .project > a:hover {
     background-color: #0066cc;
+}
+
+html.dark-mode .project-card h3 a:hover {
+    color: #0088ff;
+}
+
+.footer {
+    text-align: center;
+    padding: 2rem;
+    margin-top: 3rem;
+    border-top: 1px solid var(--border-color);
+}
+
+.footer p {
+    margin: 0;
+}
+
+.footer a {
+    color: var(--text-color);
+    text-decoration: none;
+}
+
+.footer a:hover {
+    text-decoration: underline;
 }

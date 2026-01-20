@@ -1,4 +1,3 @@
-// ===== DARK MODE TOGGLE =====
 const themeToggle = document.getElementById('light-dark');
 const htmlElement = document.documentElement;
 
