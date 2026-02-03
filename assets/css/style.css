@@ -8,13 +8,36 @@
 html {
     scroll-snap-type: y mandatory;
     scroll-behavior: smooth;
-    scroll-padding-top: 70px;
+    height: 100%;
+    overflow-y: auto;
 }
 
-html, body {
-    height: 100%;
+body {
     margin: 0;
+    min-height: 100vh; 
     overflow-x: hidden;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+}
+
+:root {
+    --bg-color: #ffffff;
+    --text-color: #333;
+    --border-color: #e0e0e0;
+    --font-hero:    clamp(2.5rem, 8vw, 4rem);
+    --font-logo:    1.5rem;
+    --font-h1:      2rem;
+    --font-h3:      1.25rem;
+    --font-body:    1rem;
+    --font-small:   0.875rem;
+    --font-footer:  0.8rem;
+}
+
+html.dark-mode {
+    --bg-color: #1a1a1a;
+    --text-color: #e0e0e0;
+    --border-color: #333;
 }
 
 .navbar {
@@ -37,13 +60,10 @@ html, body {
     color: inherit;
 }
 
-.logo-link:hover {
-    opacity: 0.8;
-    transition: opacity 0.3s ease;
-}
+.logo-link:hover { opacity: 0.8; }
 
 .navbar h4 {
-    font-size: 1.5rem;
+    font-size: var(--font-logo);
     font-weight: bold;
     margin: 0;
 }
@@ -57,192 +77,124 @@ html, body {
 
 .nav-link {
     text-decoration: none;
-    color: #333;
+    color: var(--text-color);
     font-weight: 500;
-    cursor: pointer;
-    border: none;
-    background: none;
-    font-size: 1rem;
+    font-size: var(--font-body);
+    opacity: 0.8;
 }
 
-.nav-link:hover {
-    transition: color 0.3s ease;
-    color: var(--text-color);
-}
+.nav-link:hover { opacity: 1; }
 
-body {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    background-color: var(--bg-color);
-    color: var(--text-color);
-}
-
-:root {
-    --bg-color: #ffffff;
-    --text-color: #333;
-    --border-color: #e0e0e0;
-}
-
-html.dark-mode {
-    --bg-color: #1a1a1a;
-    --text-color: #e0e0e0;
-    --border-color: #333;
-}
-
-.theme-toggle-wrapper {
-    display: flex;
-    align-items: center;
-}
-
-.theme-toggle-checkbox {
-    display: none;
-}
-
+.theme-toggle-wrapper { display: flex; align-items: center; }
+.theme-toggle-checkbox { display: none; }
 .theme-toggle-label {
     position: relative;
     width: 60px;
     height: 30px;
-    background-color: #ccc;
+    background-color: #d1d1d1;
     border-radius: 15px;
     cursor: pointer;
     transition: background-color 0.3s ease;
 }
-
-.theme-toggle-checkbox:checked + .theme-toggle-label {
-    background-color: #333;
-}
-
+.theme-toggle-checkbox:checked + .theme-toggle-label { background-color: #b8b8b8; }
 .toggle-switch {
     position: absolute;
     top: 3px;
     left: 3px;
     width: 24px;
     height: 24px;
-    background-color: white;
+    background-color: #1a1a1a;
     border-radius: 50%;
-    transition: left 0.3s ease;
+    transition: left 0.3s ease, background-color 0.3s ease;
 }
+.theme-toggle-checkbox:checked + .theme-toggle-label .toggle-switch { left: 33px; }
 
-.theme-toggle-checkbox:checked + .theme-toggle-label .toggle-switch {
-    left: 33px;
-}
+html.dark-mode .theme-toggle-label { background-color: #2a2a2a; }
+html.dark-mode .theme-toggle-checkbox:checked + .theme-toggle-label { background-color: #3a3a3a; }
+html.dark-mode .toggle-switch { background-color: #ffffff; }
 
-.toggle-inner {
-    position: absolute;
-    top: 50%;
-    left: 10px;
-    transform: translateY(-50%);
-    font-size: 14px;
-}
-
-.theme-toggle-checkbox:checked + .theme-toggle-label .toggle-inner {
-    left: auto;
-    right: 10px;
-}
-
-html.dark-mode .nav-link {
-    color: #b0b0b0; 
-}
-
-html.dark-mode .nav-link:hover {
-    color: #e0e0e0;
-}
-
-.about, .project {
+.hero, .about, .project {
     height: 100dvh;
     width: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: flex-start;
+    padding-top: calc(70px + (100dvh - 70px) * 0.35);
+    padding-left: 2rem;
+    padding-right: 2rem;
     position: relative;
     scroll-snap-align: start;
     scroll-snap-stop: always;
-    padding: 90px 2rem 2rem 2rem; 
+    margin: 0;
+    box-sizing: border-box;
 }
 
-.about {
-    justify-content: center;
+.hero h1 {
+    font-size: var(--font-hero);
+    font-weight: 800;
+    margin-bottom: 0.5rem;
+    text-align: center;
+}
+
+.hero p {
+    font-size: var(--font-body);
+    font-weight: 300;
+    text-align: center;
+}
+
+.hero p.hero-subtext {
+    font-size: var(--font-small);
+    opacity: 0.6;
+    max-width: 500px;
+    margin: 1rem auto 0 auto;
+    line-height: 1.5;
+}
+
+.about h1 { font-size: var(--font-h1); }
+.about p {
+    max-width: 700px;
+    line-height: 1.8;
+    font-size: var(--font-body);
+    text-align: center;
+    margin-top: 1.5rem;
 }
 
 .project {
-    justify-content: space-between;
+    justify-content: center;
+    padding-top: 70px;
+    padding-bottom: 70px;
 }
 
-.scroll-indicator {
-    position: absolute;
-    bottom: 50px;
-    left: 50%;
-    transform: translateX(-50%);
-    color: var(--text-color);
-    opacity: 0.5;
-    animation: bounce 2s infinite;
-    transition: opacity 0.3s ease;
-    cursor: pointer;
-    z-index: 10;
-}
-
-.scroll-indicator:hover {
-    opacity: 1;
-}
-
-@keyframes bounce {
-    0%, 20%, 50%, 80%, 100% { transform: translate(-50%, 0); }
-    40% { transform: translate(-50%, -10px); }
-    60% { transform: translate(-50%, -5px); }
-}
-
-.reveal {
-    opacity: 0;
-    transform: translateY(50px);
-    transition: all 0.8s ease-out;
-}
-
-.reveal.active {
-    opacity: 1;
-    transform: translateY(0);
-}
-
-.project-card:nth-child(2) {
-    transition-delay: 0.2s;
-}
-
-.about h1, .project h1 {
-    margin-top: 0;
+.project h1 {
+    font-size: var(--font-h1);
+    text-align: center;
     margin-bottom: 1.5rem;
-    font-size: 2.2rem;
 }
-
-.about p {
-    line-height: 1.6;
-    font-size: 1.1rem;
-}
-
 
 .project-container {
-    flex-grow: 1;
-    display: flex;
-    align-items: center;
-    max-width: 1000px;
-    margin: 0 auto;
+    width: 100%;
+    max-width: 1100px;
+    margin-bottom: 2rem;
 }
 
 .project-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: 2rem;
-    justify-items: center;
-    align-items: stretch;
+    gap: 2.5rem;
+    width: 100%;
 }
-
 
 .project-card {
     background-color: var(--bg-color);
     border: 1px solid var(--border-color);
-    border-radius: 8px;
+    border-radius: 12px;
     padding: 1.5rem;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    transition: all 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     text-align: center;
-    max-width: 400px;
-    width: 100%;
 }
 
 .project-card:hover {
@@ -250,111 +202,254 @@ html.dark-mode .nav-link:hover {
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
 }
 
-.project-card h3 a {
-    text-decoration: none;
-    color: inherit;
-    cursor: pointer;
-    transition: color 0.3s ease;
-}
-
-.project-card h3 a:hover {
-    color: #0066cc;
+.project-card img {
+    aspect-ratio: 16 / 9;
+    width: 100%;
+    object-fit: fill;
+    border-radius: 6px;
+    margin-bottom: 1rem;
 }
 
 .project-card h3 {
-    margin-bottom: 1rem;
-    margin-top: -0.5rem;
-    font-size: 1.3rem;
+    font-size: var(--font-h3);
 }
 
-.project-card img {
-    width: 100%;
-    height: 200px; 
-    object-fit: cover;
-    border-radius: 5px;
-    margin-bottom: 1rem;
+.project-card h3 a {
+    text-decoration: none;
+    color: inherit;
 }
 
 .project-card p {
-    margin-bottom: 1rem;
-    line-height: 1.5;
+    font-size: var(--font-small);
+    margin-top: 0.5rem;
+    opacity: 0.8;
 }
 
-
 .project > a {
-    display: inline-block;
-    padding: 0.8rem 2rem;
-    background-color: var(--text-color);
-    color: var(--bg-color);
+    padding: 0.8rem 2.5rem;
+    background-color: transparent;
+    color: var(--text-color);
+    border: 2px solid var(--text-color);
     text-decoration: none;
-    border-radius: 30px;
+    border-radius: 50px;
     font-weight: 600;
-    margin-bottom: 1rem;
-    transition: transform 0.3s ease;
+    transition: all 0.3s ease;
+    display: inline-block;
 }
 
 .project > a:hover {
-    background-color: #0052a3;
-    transform: scale(1.05);
+    background-color: var(--text-color);
+    color: var(--bg-color);
+    transform: translateY(-2px);
 }
 
-html.dark-mode .project > a {
-    background-color: #0088ff;
+.scroll-indicator {
+    position: absolute;
+    bottom: 40px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 20;
+    cursor: pointer;
+    line-height: 0;
+    opacity: 0.5;
+    animation: bounce 2s infinite;
 }
 
-html.dark-mode .project > a:hover {
-    background-color: #0066cc;
+.scroll-indicator svg {
+    pointer-events: none;
 }
 
-html.dark-mode .project-card h3 a:hover {
-    color: #0088ff;
+@keyframes bounce {
+    0%, 20%, 50%, 80%, 100% { transform: translateX(-50%) translateY(0); }
+    40% { transform: translateX(-50%) translateY(-10px); }
+    60% { transform: translateX(-50%) translateY(-5px); }
 }
 
 .footer {
-    text-align: center;
-    padding: 1.5rem;
-    margin-top: 2rem;
-    border-top: 1px solid var(--border-color);
+    position: absolute;
+    bottom: 0;
     width: 100%;
+    height: 60px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-top: 1px solid var(--border-color);
+    background-color: var(--bg-color);
 }
 
 .footer p {
     margin: 0;
+    font-size: var(--font-footer);
 }
 
 .footer a {
     color: var(--text-color);
     text-decoration: none;
+    font-weight: 600;
 }
 
-.footer a:hover {
-    text-decoration: underline;
+.reveal {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: all 0.8s ease-out;
+}
+.reveal.active {
+    opacity: 1;
+    transform: translateY(0);
 }
 
 @media (max-width: 768px) {
-    html {
-        scroll-snap-type: none;
+    html { scroll-snap-type: none; }
+    
+    .navbar {
+        padding: 0 1rem;
+        height: 60px;
     }
-
-    .about, .project {
-        height: auto; 
+    
+    .navbar h4 {
+        font-size: 1.2rem;
+    }
+    
+    .nav-menu {
+        gap: 1rem;
+    }
+    
+    .nav-link {
+        font-size: 0.9rem;
+    }
+    
+    .theme-toggle-label {
+        width: 50px;
+        height: 25px;
+    }
+    
+    .toggle-switch {
+        width: 20px;
+        height: 20px;
+        top: 2.5px;
+        left: 2.5px;
+    }
+    
+    .theme-toggle-checkbox:checked + .theme-toggle-label .toggle-switch {
+        left: 27.5px;
+    }
+    
+    .hero, .about, .project {
+        height: auto;
         min-height: 100dvh;
-        padding: 80px 1rem 2rem 1rem;
+        justify-content: center;
+        padding-top: 60px;
+        padding-left: 1.5rem;
+        padding-right: 1.5rem;
+        padding-bottom: 2rem;
+    }
+    
+    .hero h1 {
+        margin-bottom: 1rem;
+    }
+    
+    .hero p {
+        font-size: 0.95rem;
+    }
+    
+    .hero p.hero-subtext {
+        font-size: 0.85rem;
+        max-width: 100%;
+    }
+    
+    .about h1 {
+        font-size: 1.75rem;
+    }
+    
+    .about p {
+        font-size: 0.95rem;
+        line-height: 1.6;
+    }
+    
+    .project h1 {
+        font-size: 1.75rem;
+        margin-bottom: 1.5rem;
     }
     
     .project-grid {
         grid-template-columns: 1fr;
-    }
-
-    .project-card {
-        max-width: 100%;
+        gap: 1.5rem;
     }
     
-    .project-container {
-        margin-top: 2rem;
+    .project-card {
+        padding: 1.25rem;
     }
+    
+    .project-card img {
+        border-radius: 8px;
+    }
+    
+    .project-card h3 {
+        font-size: 1.1rem;
+        margin-bottom: 0.5rem;
+    }
+    
+    .project-card p {
+        font-size: 0.85rem;
+        line-height: 1.5;
+    }
+    
+    .project > a {
+        padding: 0.7rem 2rem;
+        font-size: 0.95rem;
+        width: auto;
+        text-align: center;
+    }
+    
+    .footer {
+        position: relative;
+        margin-top: 2rem;
+        height: 50px;
+    }
+    
+    .footer p {
+        font-size: 0.75rem;
+        text-align: center;
+        padding: 0 1rem;
+    }
+    
+    .scroll-indicator {
+        display: none;
+    }
+}
 
+@media (max-width: 480px) {
     .navbar {
+        padding: 0 0.75rem;
+    }
+    
+    .navbar h4 {
+        font-size: 1.1rem;
+    }
+    
+    .nav-menu {
+        gap: 0.75rem;
+    }
+    
+    .nav-link {
+        font-size: 0.85rem;
+    }
+    
+    .hero, .about, .project {
+        padding-left: 1rem;
+        padding-right: 1rem;
+    }
+    
+    .project > a {
+        padding: 0.6rem 1.5rem;
+        font-size: 0.9rem;
+    }
+    
+    .project-card {
         padding: 1rem;
+    }
+    
+    .footer p {
+        font-size: 0.7rem;
     }
 }

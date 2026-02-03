@@ -1,6 +1,6 @@
 # Gonçalo Lima | Portfolio
 
-Meu portefólio pessoal — projetos de IT, networking e infraestrutura.
+Meu portfólio pessoal — projetos de IT, networking e infraestrutura.
 
 ## Como rodar localmente
 

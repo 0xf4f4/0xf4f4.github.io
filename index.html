@@ -25,31 +25,49 @@
                 </li>
             </ul>
         </nav>
+        
+        <section id="hero" class="hero">
+            <div class="hero-content">
+                <h1>Gonçalo Lima</h1>
+                <p>IT | Networking & Infrastructure Enthusiast</p>
+                <p class="hero-subtext">Bem-vindo ao meu portfólio. Aqui encontras os meus projetos e o meu percurso técnico.</p>
+            </div>
+            <div class="scroll-indicator" data-target="#about">
+                <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M7 13l5 5 5-5M7 6l5 5 5-5"/>
+                </svg>
+            </div>
+        </section>
+        
         <section id="about" class="about">
             <h1>Sobre mim</h1>
             <p>
             Lorem ipsum dolor sit amet consectetur adipiscing elit. Consectetur adipiscing elit quisque faucibus ex sapien vitae. Ex sapien vitae pellentesque sem placerat in id. Placerat in id cursus mi pretium tellus duis. Pretium tellus duis convallis tempus leo eu aenean.
             </p>
-            <div class="scroll-indicator">
+            <div class="scroll-indicator" data-target=".project">
                 <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M7 13l5 5 5-5M7 6l5 5 5-5"/>
                 </svg>
             </div>
-        </section> 
+        </section>
+        
         <section class="project">
             <h1>Projetos</h1>
             <div class="project-container">
                 <div class="project-grid">
+                    
                     <div class="project-card reveal"> 
                         <h3><a href="">Lab GNS3 com VLAN's e Active Directory</a></h3>
                         <img src="assets/images/post1.png"> 
                         <p>Topologia de rede prática com VLANs e Active Directory integrada com VMs Windows em GNS3. Segmentação, trunking e inter-VLAN routing</p>
                     </div>
+                    
                     <div class="project-card reveal">
                         <h3>Example project 2</h3>
                         <img src="assets/"> 
                         <p>Descriçao projeto</p>
                     </div>
+                    
                 </div>
             </div>
             <a href="projects.html" class="">Ver mais projetos</a>
@@ -57,6 +75,7 @@
                 <p>© 2026 Gonçalo Lima | <a href="https://github.com/0xf4f4">GitHub</a></p>
             </footer>
         </section>
+        
         <script src="assets/js/script.js"></script>
     </body>
 </html>
