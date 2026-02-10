@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pt-PT">
+<html lang="pt-PT" class="snap-scroll">
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -13,7 +13,7 @@
             <a href="index.html" class="logo-link"><h4>Gonçalo Lima</h4></a>
             <ul class="nav-menu">
                 <li><a href="#about" class="nav-link">Sobre mim</a></li>
-                <li><a href="projects.html" class="nav-link">Projetos</a></li>
+                <li><a href="projects/" class="nav-link">Projetos</a></li>
                 <li>
                 <div class="theme-toggle-wrapper">
                     <input type="checkbox" id="light-dark" class="theme-toggle-checkbox">
@@ -29,8 +29,8 @@
         <section id="hero" class="hero">
             <div class="hero-content">
                 <h1>Gonçalo Lima</h1>
-                <p>IT | Networking & Infrastructure Enthusiast</p>
-                <p class="hero-subtext">Bem-vindo ao meu portfólio. Aqui encontras os meus projetos e o meu percurso técnico.</p>
+                <p>IT Enthusiast | Networking & Troubleshooting</p>
+                <p class="hero-subtext">Autodidacta em IT com foco em networking e troubleshooting. Aqui documento os problemas que resolvi e como.</p>
             </div>
             <div class="scroll-indicator" data-target="#about">
                 <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -42,7 +42,10 @@
         <section id="about" class="about">
             <h1>Sobre mim</h1>
             <p>
-            Lorem ipsum dolor sit amet consectetur adipiscing elit. Consectetur adipiscing elit quisque faucibus ex sapien vitae. Ex sapien vitae pellentesque sem placerat in id. Placerat in id cursus mi pretium tellus duis. Pretium tellus duis convallis tempus leo eu aenean.
+                Sou apaixonado por tecnologia desde miúdo. Comecei a explorar sistemas aos 11 anos, aprendi inglês fluente através de documentação técnica e conteúdo online, e nunca parei de partir coisas para perceber como funcionam (brick a um sistema android, oops).
+            </p>
+            <p>
+                Tenho formação em GPSI (Gestão e Programação de Sistemas Informáticos) e foco-me em networking, virtualização, e troubleshooting. Acredito que a melhor forma de aprender é fazendo, por isso, todos os projetos aqui começaram com um problema real e terminaram com uma solução que funciona.
             </p>
             <div class="scroll-indicator" data-target=".project">
                 <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -57,22 +60,22 @@
                 <div class="project-grid">
                     
                     <div class="project-card reveal"> 
-                        <h3><a href="">Lab GNS3 com VLAN's e Active Directory</a></h3>
-                        <img src="assets/images/post1.png"> 
+                        <h3><a href="projects/lab-gns3-vlans.html">Lab GNS3 com VLAN's e Active Directory</a></h3>
+                        <img src="assets/images/post1.png" alt="Lab GNS3"> 
                         <p>Topologia de rede prática com VLANs e Active Directory integrada com VMs Windows em GNS3. Segmentação, trunking e inter-VLAN routing</p>
                     </div>
                     
                     <div class="project-card reveal">
-                        <h3>Example project 2</h3>
-                        <img src="assets/"> 
-                        <p>Descriçao projeto</p>
+                        <h3><a href="projects/sunshine-moonlight-streaming.html">Game Streaming Caseiro</a></h3>
+                        <img src="assets/images/post2.png" alt="Game Streaming Caseiro"> 
+                        <p>Troubleshooting de Client Isolation em rede doméstica e configuração de game streaming de baixa latência. Budget-friendly e prático</p>
                     </div>
                     
                 </div>
             </div>
-            <a href="projects.html" class="">Ver mais projetos</a>
+            <a href="projects/">Ver mais projetos</a>
             <footer class="footer">
-                <p>© 2026 Gonçalo Lima | <a href="https://github.com/0xf4f4">GitHub</a></p>
+                <p>© 2026 Gonçalo Lima | <a href="https://github.com/0xf4f4">GitHub</a> | <a href="https://www.linkedin.com/in/goncalolima17/">LinkedIn</a></p>
             </footer>
         </section>
         

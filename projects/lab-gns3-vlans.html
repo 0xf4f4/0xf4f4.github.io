@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Lab GNS3 - VLANs & AD | Gonçalo Lima</title>
+        <link rel="icon" type="image/png" href="../assets/images/favicon.png">
+        <link rel="stylesheet" href="../assets/css/style.css">
+    </head>
+    
+    <body>
+        <nav class="navbar">
+            <a href="../index.html" class="logo-link"><h4>Gonçalo Lima</h4></a>
+            <ul class="nav-menu">
+                <li><a href="../index.html#about" class="nav-link">Sobre mim</a></li>
+                <li><a href="index.html" class="nav-link">Projetos</a></li>
+                <li>
+                <div class="theme-toggle-wrapper">
+                    <input type="checkbox" id="light-dark" class="theme-toggle-checkbox">
+                    <label for="light-dark" class="theme-toggle-label">
+                        <span class="toggle-inner"></span>
+                        <span class="toggle-switch"></span>
+                    </label>
+                </div>
+                </li>
+            </ul>
+        </nav>
+        
+        <main class="project-post">
+            <header class="post-header">
+                <h1>GNS3 Lab — VLANs, Inter-VLAN Routing e Active Directory</h1>
+                <div class="post-meta">
+                    <span class="post-date">Dezembro 2025</span>
+                    <div class="post-tags">
+                        <span class="tag">GNS3</span>
+                        <span class="tag">Cisco IOS</span>
+                        <span class="tag">Active Directory</span>
+                        <span class="tag">VLANs</span>
+                        <span class="tag">Wireshark</span>
+                        <span class="tag">Windows 7</span>
+                        <span class="tag">Windows Server</span>
+                    </div>
+                </div>
+            </header>
+
+            <div class="post-content">
+                <section class="post-section">
+                    <h2>Objetivo do Lab</h2>
+                    <p>
+                        Notei que em várias candidaturas pediam algo que nunca tinha mexido: Active Directory. Como era um gap no meu conhecimento, arregacei as mangas e meti mãos à obra. Claro que, configurar uma VM Windows Server e testar configs seria o mais básico, mas como tinha aprendido a configurar VLANs, decidi elevar um bocado a fasquia e aprender também uma ferramenta nova, o GNS3.
+                    </p>
+                    <p>
+                        GNS3 permite emular Routers e Switches Cisco, como se fossem verdadeiros, e interligar a máquinas virtuais. Optei por Windows 7 por uma questão de recursos físicos.
+                    </p>
+                    <p>Este laboratório demonstra:</p>
+                    <ul>
+                        <li>Segmentação de rede com VLANs</li>
+                        <li>Trunking 802.1Q entre switches</li>
+                        <li>Inter-VLAN routing</li>
+                        <li>Integração de máquinas Windows (VirtualBox) com GNS3</li>
+                        <li>Configuração inicial de Active Directory e Group Policies</li>
+                        <li>Troubleshooting com Wireshark e análise de tráfego VLAN (VID)</li>
+                    </ul>
+                </section>
+
+                <section class="post-section">
+                    <h2>Topologia Geral</h2>
+                    <p>A topologia é composta por:</p>
+                    <ul>
+                        <li>1 Router (R1)</li>
+                        <li>2 Switches L2 (SW1 e SW2)</li>
+                        <li>1 Windows Server (Domain Controller)</li>
+                        <li>2 Clients Windows 7</li>
+                    </ul>
+                    <div class="post-image">
+                        <img src="../assets/images/post1.png" alt="Topologia da rede GNS3">
+                        <p class="image-caption">Topologia da rede implementada em GNS3</p>
+                    </div>
+                </section>
+
+                <section class="post-section">
+                    <h2>Planeamento de Endereçamento IP e VLANs</h2>
+                    <p>
+                        Utilizei a rede <strong>192.168.1.0/24</strong>, subnetted para <strong>/26</strong>, dando um total de 4 blocos de 64 endereços.
+                    </p>
+                    
+                    <h3>VLANs Utilizadas</h3>
+                    <ul>
+                        <li><strong>VLAN 10 - Windows Server:</strong> 192.168.1.0/26 (Gateway: 192.168.1.62)</li>
+                        <li><strong>VLAN 20 - Admin:</strong> 192.168.1.64/26 (Gateway: 192.168.1.126)</li>
+                        <li><strong>VLAN 30 - HR:</strong> 192.168.1.128/26 (Gateway: 192.168.1.190)</li>
+                    </ul>
+                </section>
+
+                <section class="post-section">
+                    <h2>Especificações das Máquinas Virtuais</h2>
+                    
+                    <h3>Host físico</h3>
+                    <ul>
+                        <li>Ryzen 5 3600 (6 cores / 12 threads)</li>
+                        <li>16 GB RAM</li>
+                    </ul>
+
+                    <h3>VMs utilizadas</h3>
+                    <ul>
+                        <li><strong>GNS3 VM:</strong> 4 vCPU, 6 GB RAM</li>
+                        <li><strong>Router (R1):</strong> 2 vCPU, 800 MB RAM</li>
+                        <li><strong>Switch SW1:</strong> 2 vCPU, 800 MB RAM</li>
+                        <li><strong>Switch SW2:</strong> 2 vCPU, 800 MB RAM</li>
+                        <li><strong>Windows Server:</strong> 2 vCPU, 2 GB RAM</li>
+                        <li><strong>Windows 7 PC1:</strong> 1 vCPU, 1 GB RAM</li>
+                        <li><strong>Windows 7 PC2:</strong> 1 vCPU, 1 GB RAM</li>
+                    </ul>
+                </section>
+
+                <section class="post-section">
+                    <h2>Configuração de Rede</h2>
+                    
+                    <h3>Switches</h3>
+                    <p>Ambos os switches (SW1 e SW2) foram configurados com:</p>
+                    <ul>
+                        <li>VLANs 10, 20 e 30</li>
+                        <li>Portas de acesso para cada VLAN</li>
+                        <li>Trunking 802.1Q nas interfaces de interligação</li>
+                    </ul>
+
+                    <h3>Router (Inter-VLAN Routing)</h3>
+                    <p>O Router R1 foi configurado com sub-interfaces para cada VLAN, permitindo o routing entre elas:</p>
+                    <ul>
+                        <li>GigabitEthernet0/0.10 - Gateway VLAN 10</li>
+                        <li>GigabitEthernet0/0.20 - Gateway VLAN 20</li>
+                        <li>GigabitEthernet0/0.30 - Gateway VLAN 30</li>
+                    </ul>
+                </section>
+
+                <section class="post-section">
+                    <h2>Troubleshooting e Firewall</h2>
+                    <p>Durante os testes iniciais, encontrei um problema interessante:</p>
+                    <ul>
+                        <li>O gateway respondia ao ping</li>
+                        <li>Os hosts não respondiam entre si</li>
+                    </ul>
+
+                    <p>A análise com <strong>Wireshark</strong> revelou:</p>
+                    <ul>
+                        <li>ICMP requests corretos</li>
+                        <li>Respostas "Destination Host Unreachable"</li>
+                        <li>Frames marcados como <strong>LOOP</strong></li>
+                    </ul>
+
+                    <p>
+                        A causa foi identificada como <strong>Windows Firewall a bloquear ICMP</strong>. 
+                        A solução passou por criar uma regra <strong>Inbound ICMPv4</strong> nas VMs Windows.
+                    </p>
+                    <p>
+                        Após a correção, a análise de tráfego com Wireshark confirmou que os VIDs (VLAN IDs) estavam corretos nos trunks.
+                    </p>
+                </section>
+
+                <section class="post-section">
+                    <h2>Active Directory</h2>
+                    <p>Configurei um domínio Active Directory completo:</p>
+                    
+                    <h3>Configuração base</h3>
+                    <ul>
+                        <li><strong>Forest:</strong> ad.lab</li>
+                        <li><strong>NetBIOS:</strong> ADLAB</li>
+                    </ul>
+
+                    <h3>Organizational Units (OUs)</h3>
+                    <ul>
+                        <li>Servers</li>
+                        <li>Admins</li>
+                        <li>HR</li>
+                    </ul>
+
+                    <h3>Grupos de segurança</h3>
+                    <ul>
+                        <li>Admin-Users</li>
+                        <li>HR-Users</li>
+                    </ul>
+
+                    <h3>Group Policies</h3>
+                    <p><strong>HR (recursos humanos):</strong></p>
+                    <ul>
+                        <li>Bloqueio de CMD</li>
+                        <li>Bloqueio de PowerShell</li>
+                        <li>Bloqueio de Registry Editor</li>
+                    </ul>
+                    <p><strong>Admin:</strong></p>
+                    <ul>
+                        <li>Sem restrições adicionais</li>
+                    </ul>
+                </section>
+
+                <section class="post-section">
+                    <h2>Resultados e Testes Finais</h2>
+                    <p>Todos os objetivos do laboratório foram alcançados com sucesso:</p>
+                    <ul>
+                        <li>Ping entre hosts de VLANs diferentes</li>
+                        <li>Inter-VLAN routing confirmado</li>
+                        <li>VID correto visível em trunks via Wireshark</li>
+                        <li>Aplicação de GPOs validada (HR vs Admin)</li>
+                    </ul>
+                    <p>
+                        O PC1 (Admin) consegue executar CMD normalmente, enquanto o PC2 (HR) tem o acesso bloqueado pelas Group Policies, demonstrando a correta implementação das políticas de segurança.
+                    </p>
+                </section>
+
+                <section class="post-section">
+                    <h2>Conclusões</h2>
+                    <p>
+                        Este projeto permitiu-me consolidar conhecimentos em networking e aprender tecnologias novas. A combinação de GNS3 com máquinas virtuais Windows revelou-se uma excelente forma de simular ambientes empresariais, permitindo testar configurações complexas antes de implementação em produção.
+                    </p>
+                    <p>
+                        O troubleshooting com Wireshark foi fundamental para identificar e resolver problemas de conectividade, demonstrando a importância de ferramentas de análise de tráfego em ambientes de rede.
+                    </p>
+                </section>
+                
+                <div class="post-footer">
+                    <a href="index.html" class="back-link">← Voltar aos Projetos</a>
+                    <a href="https://github.com/0xf4f4/GNS3-VLAN-AD-LAB" class="back-link" target="_blank">Ver no GitHub</a>
+                </div>
+            </div>
+        </main>
+
+        <footer class="footer">
+            <p>© 2026 Gonçalo Lima | <a href="https://github.com/0xf4f4">GitHub</a> | <a href="https://www.linkedin.com/in/goncalolima17/">LinkedIn</a></p>
+        </footer>
+
+        <script src="../assets/js/script.js"></script>
+    </body>
+</html>

@@ -12,7 +12,8 @@ Depois abrir em: `http://localhost:4000`
 
 ## Conteúdo
 
-- **Still Working On It** 
+- **Lab GNS3 + VLAN's + Active Directory** 
+- **Game Streaming Caseiro** 
 
 ## Live
 

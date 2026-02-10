@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Game Streaming Caseiro | Gonçalo Lima</title>
+        <link rel="icon" type="image/png" href="../assets/images/favicon.png">
+        <link rel="stylesheet" href="../assets/css/style.css">
+    </head>
+    
+    <body>
+        <nav class="navbar">
+            <a href="../index.html" class="logo-link"><h4>Gonçalo Lima</h4></a>
+            <ul class="nav-menu">
+                <li><a href="../index.html#about" class="nav-link">Sobre mim</a></li>
+                <li><a href="index.html" class="nav-link">Projetos</a></li>
+                <li>
+                <div class="theme-toggle-wrapper">
+                    <input type="checkbox" id="light-dark" class="theme-toggle-checkbox">
+                    <label for="light-dark" class="theme-toggle-label">
+                        <span class="toggle-inner"></span>
+                        <span class="toggle-switch"></span>
+                    </label>
+                </div>
+                </li>
+            </ul>
+        </nav>
+        
+        <main class="project-post">
+            <header class="post-header">
+                <h1>Game Streaming Caseiro - Troubleshooting Client Isolation e Setup Sunshine/Moonlight</h1>
+                <div class="post-meta">
+                    <span class="post-date">Janeiro 2026</span>
+                    <div class="post-tags">
+                        <span class="tag">Networking</span>
+                        <span class="tag">Troubleshooting</span>
+                        <span class="tag">Sunshine</span>
+                        <span class="tag">Moonlight</span>
+                        <span class="tag">Tailscale</span>
+                    </div>
+                </div>
+            </header>
+
+            <div class="post-content">
+                <section class="post-section">
+                    <h2>Contexto</h2>
+                    <p>
+                        Vivo num local com um setup de rede um pouco peculiar: um router principal e vários Access Points espalhados pelos "apartamentos". O meu PC está ligado por cabo Ethernet (Cat5e), mas como só tinha uma porta disponível, tive de adicionar um switch.
+                    </p>
+                    <p>
+                        A topologia inicial era simples: o cabo do router ia para o switch, e tanto o AP como o PC ficavam ligados ao switch. Internet funcionava perfeitamente, mas comecei a notar algo estranho, o meu telemóvel não conseguia ligar à smart TV. Na altura, não liguei muito pois era irrelevante.
+                    </p>
+                </section>
+
+                <section class="post-section">
+                    <h2>Ideia - Budget Handheld Gaming</h2>
+                    <p>
+                        Com o boom dos handhelds como Steam Deck e ROG Ally, obviamente fiquei curioso. O problema? Custam €500+ e acabava por ser "desnecessário" visto que já tenho um computador relativamente bom. Foi então que descobri uma alternativa: <strong>Sunshine + Moonlight</strong>.
+                    </p>
+                    <p>
+                        O conceito é simples mas poderoso: streaming do PC para qualquer dispositivo com latência mínima. Imagina usar o telemóvel como ecrã, adicionar um Backbone (comando que se encaixa no telemóvel), e ter essencialmente uma consola portátil caseira.
+                    </p>
+                    
+                    <div class="post-image">
+                        <img src="../assets/images/post2t.jpeg" alt="Setup Handheld com telemóvel e comando">
+                        <p class="image-caption">O resultado final: Streaming do PC para o telemóvel com latência impercetível</p>
+                    </div>
+                    
+                    <h3>O que são Sunshine e Moonlight?</h3>
+                    <ul>
+                        <li><strong>Sunshine:</strong> Software open source que corre no PC host e faz streaming dos jogos</li>
+                        <li><strong>Moonlight:</strong> Cliente que corre no dispositivo móvel e recebe o stream</li>
+                        <li><strong>Protocolo:</strong> Compatível com NVIDIA GameStream, funciona em GPUs AMD, NVIDIA e Intel com suporte a encoding por hardware</li>
+                        <li><strong>Latência:</strong> Otimizado para gaming, com encoding H.264/H.265</li>
+                    </ul>
+                </section>
+
+                <section class="post-section">
+                    <h2>Problema - Discovery Failure</h2>
+                    <p>
+                        Configurei tudo no PC (Sunshine) e no telemóvel (Moonlight), mas quando tentei conectar... nada. O Moonlight não conseguia descobrir o PC na rede local.
+                    </p>
+                    <p>
+                        Cheirava-me a esturro. Então comecei a eliminar fatores:
+                    </p>
+                    <ul>
+                        <li>IPs estavam na mesma subnet</li>
+                        <li>Firewall do PC permitia as portas do Sunshine</li>
+                        <li>Descoberta automática (mDNS/Bonjour) não funcionava</li>
+                    </ul>
+                </section>
+
+                <section class="post-section">
+                    <h2>Troubleshooting</h2>
+                    
+                    <h3>Teste com Tailscale VPN Mesh</h3>
+                    <p>
+                        Para isolar o problema, decidi fazer um teste: configurei uma VPN mesh com o <strong>Tailscale</strong>. Tailscale cria uma rede overlay entre dispositivos, ignorando assim a rede local.
+                    </p>
+                    <p>
+                        Resultado? <strong>Funcionou perfeitamente.</strong> O Moonlight descobriu o PC através do ip da VPN sem problemas.
+                    </p>
+                    
+                    <h3>Conclusão</h3>
+                    <p>
+                        Se funciona via VPN mas não funciona na LAN, o problema não é configuração do software. É a <strong>rede local</strong> que está a bloquear discovery entre clientes.
+                    </p>
+                    <p>
+                        Root cause identificado: <strong>Client Isolation</strong> ativo no Access Point.
+                    </p>
+                    
+                    <h3>O que é Client Isolation?</h3>
+                    <p>
+                        Client Isolation (ou AP Isolation) é uma feature de segurança em APs que impede comunicação direta entre clientes e frequentemente bloqueia discovery/broadcast entre WiFi e outros dispositivos da LAN. Útil em redes públicas (cafés, hotéis), mas problemático em casa onde precisamos de:
+                    </p>
+                    <ul>
+                        <li>Casting para TV (Chromecast, AirPlay)</li>
+                        <li>Impressoras de rede</li>
+                        <li>Game streaming</li>
+                        <li>Partilha de ficheiros local</li>
+                    </ul>
+                </section>
+
+                <section class="post-section">
+                    <h2>A Solução - Router TP-Link WiFi 6</h2>
+                    <p>
+                        Como não tinha acesso às configurações do AP existente, a solução foi comprar o meu próprio hardware.
+                    </p>
+                    
+                    <h3>Hardware escolhido</h3>
+                    <p>
+                        Comprei um <strong>router TP-Link com WiFi 6</strong> e configurei-o em <strong>modo Access Point</strong>. Isto permite:
+                    </p>
+                    <ul>
+                        <li>Desativar client isolation</li>
+                        <li>Acesso total às configurações avançadas</li>
+                        <li>WiFi 6 para melhor performance e latência</li>
+                        <li>Controlo de QoS e priorização de tráfego</li>
+                    </ul>
+
+                    <h3>Topologia final</h3>
+                    <p><strong>ANTES:</strong></p>
+                    <ul>
+                        <li>ISP Router → Switch → AP original (client isolation ON)</li>
+                        <li>ISP Router → Switch → PC</li>
+                    </ul>
+                    
+                    <p><strong>DEPOIS:</strong></p>
+                    <ul>
+                        <li>ISP Router → Switch → TP-Link WiFi 6 (modo AP, isolation OFF)</li>
+                        <li>ISP Router → Switch → PC</li>
+                    </ul>
+                </section>
+
+                <section class="post-section">
+                    <h2>Configuração e Performance</h2>
+                    
+                    <h3>Setup Sunshine (PC Host)</h3>
+                    <ul>
+                        <li>Encoder: AMD AMF Encoder</li>
+                        <li>Bitrate: 60 Mbps (ajustável)</li>
+                        <li>Resolução: 1920x1080 @ 120FPS OU 2442x1290 @ 120FPS</li>
+                    </ul>
+
+                    <h3>Setup Moonlight (iPhone)</h3>
+                    <ul>
+                        <li>Codec: H.265 (HEVC)</li>
+                        <li>Optimize Game Settings: ON</li>
+                        <li>Backbone controller: Suporte nativo</li>
+                        <li>Frame Pacing Preference: Lowest Latency</li>
+                    </ul>
+
+                    <h3>Resultados de Latência</h3>
+                    <p>Após a resolução do problema de client isolation, os resultados foram excelentes:</p>
+                    <ul>
+                        <li><strong>Rede Local (WiFi 6):</strong> ~3ms de ping (ICMP)</li>
+                        <li><strong>Remoto via Tailscale (5G, 30km):</strong> ~40-50ms de ping</li>
+                        <li><strong>Frame drops:</strong> Praticamente zero em LAN</li>
+                        <li><strong>Qualidade visual:</strong> Indistinguível do PC em LAN</li>
+                    </ul>
+                </section>
+
+                <section class="post-section">
+                    <h2>Use Cases Reais</h2>
+                    <p>
+                        Este setup não é só "cool tech", eu uso-o diariamente para:
+                    </p>
+                    <ul>
+                        <li><strong>Gaming na cama/sofá:</strong> Jogos single-player ou multiplayer com controlo total</li>
+                        <li><strong>Emuladores:</strong> Emulação de várias consolas</li>
+                        <li><strong>Gaming remoto:</strong> Via Tailscale quando estou fora de casa</li>
+                        <li><strong>Produtividade:</strong> Acesso remoto ao PC para tarefas pesadas</li>
+                    </ul>
+
+                    <h3>Comparação de Custos</h3>
+                    <ul>
+                        <li><strong>Steam Deck 512GB:</strong> ~€569</li>
+                        <li><strong>ROG Ally:</strong> ~€699</li>
+                        <li><strong>Setup Sunshine/Moonlight:</strong></li>
+                            <li>Router TP-Link WiFi 6: ~€40-50</li>
+                            <li>Backbone controller: ~€30-100+</li>
+                            <li><strong>Total: €60-180 vs €569-699</strong></li>
+                        </ul>
+                    
+                </section>
+
+                <section class="post-section">
+                    <h2>Lições Aprendidas</h2>
+                    <p>Este projeto ensinou-me várias coisas importantes:</p>
+                    
+                    <h3>1. Troubleshooting Sistemático</h3>
+                    <p>
+                        Eliminar fatores metodicamente é essencial. O teste com Tailscale foi o turning point e confirmou que o problema era da rede local, não do software.
+                    </p>
+
+                    <h3>2. Client Isolation é Comum</h3>
+                    <p>
+                        Muitos APs vêm com client isolation ativa por defeito. Isto quebra funcionalidades modernas como casting, impressão, e streaming local.
+                    </p>
+
+                    <h3>3. Controlo do Hardware Importa</h3>
+                    <p>
+                        Ter acesso total às configurações do teu próprio hardware vale muito a pena. O investimento de €40-80 num router próprio pagou-se rapidamente.
+                    </p>
+
+                    <h3>4. WiFi 6 vs WiFi 5</h3>
+                    <p>
+                        A latência reduzida e melhor handling de múltiplos dispositivos do WiFi 6 fazem diferença notável em streaming de baixa latência.
+                    </p>
+                </section>
+
+                <section class="post-section">
+                    <h2>Próximos Passos</h2>
+                    <p>Melhorias futuras que estou a considerar:</p>
+                    <ul>
+                        <li>Configurar QoS para priorizar tráfego de gaming</li>
+                        <li>Setup de wake-on-LAN para ligar PC remotamente</li>
+                        <li>Implementar monitoring de latência e packet loss</li>
+                    </ul>
+                </section>
+
+                <section class="post-section">
+                    <h2>Conclusão</h2>
+                    <p>
+                        Por menos de €100, consegui criar uma solução de handheld gaming que rivaliza com hardware dedicado de €500+. O projeto começou com um problema frustrante (devices não comunicavam), mas através de troubleshooting sistemático, identifiquei a root cause e implementei uma solução elegante.
+                    </p>
+                    <p>
+                        O melhor? Não é só para gaming, o setup serve para acesso remoto ao PC, streaming de vídeo, e qualquer tarefa que beneficie de baixa latência na rede local.
+                    </p>
+                </section>
+                
+                <div class="post-footer">
+                    <a href="index.html" class="back-link">← Voltar aos Projetos</a>
+                </div>
+            </div>
+        </main>
+
+        <footer class="footer">
+            <p>© 2026 Gonçalo Lima | <a href="https://github.com/0xf4f4">GitHub</a> | <a href="https://www.linkedin.com/in/goncalolima17/">LinkedIn</a></p>
+        </footer>
+
+        <script src="../assets/js/script.js"></script>
+    </body>
+</html>

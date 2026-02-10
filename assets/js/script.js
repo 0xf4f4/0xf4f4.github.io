@@ -23,17 +23,21 @@ themeToggle.addEventListener('change', () => {
     localStorage.setItem('theme', newTheme);
 });
 
-const NAVBAR_H = document.querySelector('.navbar').offsetHeight;
+const getNavbarHeight = () => {
+    const navbar = document.querySelector('.navbar');
+    return navbar ? navbar.offsetHeight : 70;
+};
 
-document.querySelectorAll('.project-card').forEach(card => {
-    const link = card.querySelector('h3 a');
-    const img = card.querySelector('img');
-    
-    if (link && img) {
-        img.style.cursor = 'pointer';
-        img.addEventListener('click', () => {
+const NAVBAR_H = getNavbarHeight();
+
+document.addEventListener('click', (e) => {
+    const img = e.target.closest('.project-card img');
+    if (img) {
+        const card = img.closest('.project-card');
+        const link = card ? card.querySelector('h3 a') : null;
+        if (link) {
             window.location.href = link.href;
-        });
+        }
     }
 });
 
@@ -78,48 +82,56 @@ const initSmartScrollSnapping = () => {
     if (window.innerWidth <= 768) return;
     
     const sections = document.querySelectorAll('.hero, .about, .project');
+    if (sections.length === 0) return;
+    
     let isScrolling = false;
+    let lastScrollTime = 0;
+    const SCROLL_COOLDOWN = 800;
 
-    const getCurrentSection = () => {
+    const getCurrentSectionIndex = () => {
         const scrollPos = window.scrollY + window.innerHeight / 2;
-        let currentSection = sections[0];
         
-        sections.forEach(section => {
-            if (section.offsetTop <= scrollPos) {
-                currentSection = section;
+        for (let i = sections.length - 1; i >= 0; i--) {
+            if (sections[i].offsetTop <= scrollPos) {
+                return i;
             }
-        });
-        
-        return currentSection;
+        }
+        return 0;
     };
 
-    const snapToSection = (direction) => {
-        if (isScrolling) return;
+    const snapToSection = (targetIndex) => {
+        if (targetIndex < 0 || targetIndex >= sections.length) return;
         
-        const current = getCurrentSection();
-        const currentIndex = Array.from(sections).indexOf(current);
-        const targetIndex = direction === 'down' ? Math.min(currentIndex + 1, sections.length - 1) : Math.max(currentIndex - 1, 0);
-
-        if (targetIndex !== currentIndex) {
-            isScrolling = true;
-            scrollToSection(sections[targetIndex]);
-            
-            setTimeout(() => {
-                isScrolling = false;
-            }, 800);
-        }
+        isScrolling = true;
+        sections[targetIndex].scrollIntoView({ behavior: 'smooth' });
+        
+        setTimeout(() => {
+            isScrolling = false;
+        }, SCROLL_COOLDOWN);
     };
 
     window.addEventListener('wheel', (e) => {
-        e.preventDefault();
+        const now = Date.now();
         
-        if (isScrolling) return;
-        
-        if (e.deltaY > 0) {
-            snapToSection('down');
-        } else if (e.deltaY < 0) {
-            snapToSection('up');
+        if (isScrolling) {
+            e.preventDefault();
+            return;
         }
+        
+        if (now - lastScrollTime < SCROLL_COOLDOWN) {
+            e.preventDefault();
+            return;
+        }
+        
+        e.preventDefault();
+        lastScrollTime = now;
+        
+        const currentIndex = getCurrentSectionIndex();
+        const direction = e.deltaY > 0 ? 1 : -1;
+        const targetIndex = currentIndex + direction;
+        
+        snapToSection(targetIndex);
+        
     }, { passive: false });
 };
 
